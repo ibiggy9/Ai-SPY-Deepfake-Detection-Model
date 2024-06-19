@@ -10,3 +10,20 @@ To get started...
 git clone https://github.com/yourusername/audio-deepfake-detection.git
 cd audio-deepfake-detection
 pip install -r requirements.txt
+```
+
+## Usage
+xyz 
+
+### Training
+abc
+### Evaluation
+abc
+
+### Inference
+
+## Contributing 
+
+## License 
+
+## Acknowledgements
