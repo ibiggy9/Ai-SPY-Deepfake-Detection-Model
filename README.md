@@ -49,7 +49,7 @@ On the human side of the dataset, the helpful ontological concept is production 
 #### A Note on Dataset Size
 Our pretrained weights were trained on a total of 600 hours of audio, 300 for human and 300 for AI. We have found that you can get similar performance with just 7.5 hours per class or 15 hours total for the convolutional network, while the vision transformer benefits from at least 25 hours per class to get the same performance. 
 
-#### Preprocessing Your Dataset.
+### Preprocessing Your Dataset.
 Once you have compiled your dataset, put those in a subdirectory in the data directory called "ai_full" and "human_full" respectively. 
 ```bash
 /data
@@ -63,6 +63,22 @@ We then need to prepare your data for the model. Both the Vit and the CNN requir
 
 ```bash
 python -m data.convert_and_divide.py
+```
+Running this will result in the following file structure:
+```bash
+/data
+|----ai_full/
+|    |-- ai-generated mp3s of any length and quality.
+|----ai_converted/
+|    |-- Your original ai files converted to 16k 48kbps
+|----ai_split/
+|    |-- Your converted ai files split into 3 second clip. 
+|----human_full/
+|    |-- human-generated mp3s of any length and quality.
+|----human_converted/
+|    |-- Your original human files converted to 16k 48kbps
+|----human_split/
+|    |-- Your converted human files split into 3 second clip.
 ```
 
 ### Training & Evaluation
