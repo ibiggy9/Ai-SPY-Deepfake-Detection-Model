@@ -139,7 +139,7 @@ We then need to prepare your data for the model. Both the Vit and the CNN requir
 python -m data.convert_and_divide
 ```
 
-***Your data is now ready for training.***
+*Your data is now ready for training.*
 
 
 ### Training & Evaluation
