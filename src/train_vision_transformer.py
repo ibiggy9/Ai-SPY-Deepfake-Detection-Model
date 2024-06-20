@@ -22,6 +22,7 @@ from sklearn.metrics import precision_recall_fscore_support, roc_auc_score
 import torch.optim.lr_scheduler as lr_scheduler
 from scipy.signal import butter, lfilter
 from models.vit_model import VisionTransformer
+from multiprocessing import cpu_count
 
 
 class AudioDatasetForViT(Dataset):
@@ -265,10 +266,10 @@ def run_vit(save_path, log_name, lr, bs, val_log_name, incorrect_v_log, patch_si
     scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=10, factor=0.1, verbose=True)
 
     # Data directories
-    holdout_ai_directory = 'data/validation_set/AI/ai'
-    holdout_human_directory = 'data/validation_set/Human/human'
-    ai_directory = 'data/ai_split/ai'
-    human_directory = 'data/human_split/human'
+    holdout_ai_directory = './data/validation_set/ai_split'
+    holdout_human_directory = './data/validation_set/human_split'
+    ai_directory = './data/ai_split'
+    human_directory = './data/human_split'
 
 
     # Seed for reproducibility
@@ -283,14 +284,14 @@ def run_vit(save_path, log_name, lr, bs, val_log_name, incorrect_v_log, patch_si
 
     # Splitting dataset into train and test
     total_size = len(dataset)
-    test_size = int(total_size * 0.05)
+    test_size = int(total_size * 0.2)
     train_size = total_size - test_size
     train_dataset, test_dataset = random_split(dataset, [train_size, test_size])
 
     # DataLoader setup
-    train_loader = DataLoader(train_dataset, batch_size=bs, shuffle=True, num_workers=20)
-    test_loader = DataLoader(test_dataset, batch_size=bs, shuffle=True, num_workers=20)
-    validation_loader = DataLoader(validation_dataset, batch_size=bs, shuffle=True, num_workers=20)
+    train_loader = DataLoader(train_dataset, batch_size=bs, shuffle=True, num_workers=cpu_count())
+    test_loader = DataLoader(test_dataset, batch_size=bs, shuffle=True, num_workers=cpu_count())
+    validation_loader = DataLoader(validation_dataset, batch_size=bs, shuffle=True, num_workers=cpu_count())
 
     # Model setup
     device = torch.device('cuda' if torch.cuda.is_available() else 'mps')
@@ -316,10 +317,10 @@ def run_vit(save_path, log_name, lr, bs, val_log_name, incorrect_v_log, patch_si
 
 if __name__ == '__main__':
     run_vit(
-        save_path='data/models/training_models_vit/vit.pth', 
-        log_name='data/Vit_Logs/vision_transformer_log.txt', 
+        save_path='./data/models/training_models_vit/vit.pth', 
+        log_name='./Vit_Logs/vision_transformer_log.txt', 
         lr=0.00001, 
         bs=16, 
-        val_log_name='data/Vit_Logs/vision_transformer_val_log.txt', 
-        incorrect_v_log='data/Vit_Logs/vision_transformer_incorrect.txt'
+        val_log_name='./Vit_Logs/vision_transformer_val_log.txt', 
+        incorrect_v_log='./Vit_Logs/vision_transformer_incorrect.txt'
     )

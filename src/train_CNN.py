@@ -11,6 +11,8 @@ import glob
 from scipy.signal import butter, lfilter
 from sklearn.metrics import precision_recall_fscore_support, roc_auc_score, matthews_corrcoef, f1_score, confusion_matrix
 from models.cnn_model import CNNTest
+from multiprocessing import cpu_count
+
 
 # Augmentation functions
 def augment_audio(y, sr):
@@ -60,6 +62,8 @@ class AudioDataset(Dataset):
         self.augment = augment
         self.global_mean = -58.18715250929163
         self.global_std = 15.877255962380845 
+
+
 
     def __len__(self):
         return len(self.all_files)
@@ -162,7 +166,8 @@ def test(model, test_loader, criterion, device, log_name):
 
             incorrect_preds = ~correct_preds.view(-1)
             incorrect_files = [file_names[i] for i in range(len(file_names)) if incorrect_preds[i]]
-            with open("data/logs/incorrectfiles.txt", 'a+') as file:
+            os.system('touch ./CNN_Logs/incorrectfiles.txt')
+            with open("./CNN_Logs/incorrectfiles.txt", 'a+') as file:
                 for file_name in incorrect_files:
                     file.write(file_name + '\n')
 
@@ -245,10 +250,10 @@ def run(save_path, log_name, lr, bs, val_log_name, incorrect_v_log):
     num_epochs = 50
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=10, factor=0.1, verbose=True)
 
-    holdout_ai_directory = 'data/validation_set/ai/ai'
-    holdout_human_directory = 'data/validation_set/human/human'
-    ai_directory = 'data/ai_split/ai'
-    human_directory = 'data/human_split/human'
+    holdout_ai_directory = './data/validation_set/ai_split'
+    holdout_human_directory = './data/validation_set/human_split'
+    ai_directory = './data/ai_split'
+    human_directory = './data/human_split'
 
     SEED = 42
     torch.manual_seed(SEED)
@@ -259,13 +264,13 @@ def run(save_path, log_name, lr, bs, val_log_name, incorrect_v_log):
     validation_dataset = AudioDataset(holdout_ai_directory, holdout_human_directory)
 
     total_size = len(dataset)
-    test_size = int(total_size * 0.02)
+    test_size = int(total_size * 0.2)
     train_size = total_size - test_size
     train_dataset, test_dataset = random_split(dataset, [train_size, test_size])
 
-    train_loader = DataLoader(train_dataset, batch_size=bs, shuffle=True, num_workers=24)
-    test_loader = DataLoader(test_dataset, batch_size=bs, shuffle=True, num_workers=24)
-    validation_loader = DataLoader(validation_dataset, batch_size=bs, shuffle=True, num_workers=24)
+    train_loader = DataLoader(train_dataset, batch_size=bs, shuffle=True, num_workers=cpu_count())
+    test_loader = DataLoader(test_dataset, batch_size=bs, shuffle=True, num_workers=cpu_count())
+    validation_loader = DataLoader(validation_dataset, batch_size=bs, shuffle=True, num_workers=cpu_count())
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'mps')
     model = model.to(device)
@@ -283,10 +288,13 @@ def run(save_path, log_name, lr, bs, val_log_name, incorrect_v_log):
     torch.save(model.state_dict(), f'{save_path}_final_training')
 
 if __name__ == "__main__":
-    path1 = 'data/models/training_models_CNN/regularModel1.pth'
-    log1 = 'data/CNN_Logs/regularlog1.txt'
-    vlog1 = 'data/CNN_Logs/regular_validation1.txt'
-    ivlog1 = 'data/CNN_Logs/regular_incorrect_validation1.txt'
+    os.system('touch ./CNN_Logs/regularlog1.txt')
+    os.system('touch ./CNN_Logs/regular_validation1.txt')
+    os.system('touch ./CNN_Logs/regular_incorrect_validation1.txt')
+    path1 = './data/models/training_models_CNN/regularModel1.pth'
+    log1 = './CNN_Logs/regularlog1.txt'
+    vlog1 = './CNN_Logs/regular_validation1.txt'
+    ivlog1 = './CNN_Logs/regular_incorrect_validation1.txt'
 
     run(
         save_path=path1,

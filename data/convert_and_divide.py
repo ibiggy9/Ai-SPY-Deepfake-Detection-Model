@@ -143,9 +143,19 @@ if __name__ == "__main__":
     converted_dir_ai = './data/ai_converted'
     split_dir_ai = './data/ai_split'
 
+    input_dir_ai_validation = './data/validation_set/ai_full'
+    converted_dir_ai_validation = './data/validation_set/ai_converted'
+    split_dir_ai_validation = './data/validation_set/ai_split'
+
     input_dir_human = './data/human_full'
     converted_dir_human = './data/human_converted'
     split_dir_human = './data/human_split'
 
+    input_dir_human_validation = './data/validation_set/human_full'
+    converted_dir_human_validation = './data/validation_set/human_converted'
+    split_dir_human_validation = './data/validation_set/human_split'
+
     run_audio_conversion_and_splitting(input_dir=input_dir_ai, converted_dir=converted_dir_ai, split_dir=split_dir_ai)  
     run_audio_conversion_and_splitting(input_dir=input_dir_human, converted_dir=converted_dir_human, split_dir=split_dir_human)
+    run_audio_conversion_and_splitting(input_dir=input_dir_ai_validation, converted_dir=converted_dir_ai_validation, split_dir=split_dir_ai_validation)
+    run_audio_conversion_and_splitting(input_dir=input_dir_human_validation, converted_dir=converted_dir_human_validation, split_dir=split_dir_human_validation)
