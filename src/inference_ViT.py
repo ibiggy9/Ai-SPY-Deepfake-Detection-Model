@@ -11,7 +11,7 @@ import librosa
 import glob
 import numpy as np
 import signal
-from model.vit_model import VisionTransformer
+from models.vit_model import VisionTransformer
 
 
 

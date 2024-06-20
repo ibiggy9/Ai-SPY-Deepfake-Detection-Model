@@ -154,7 +154,7 @@ def save_results_to_file(results, output_file_path):
                 print(f"Error writing result to file: {e}")
 
 def run_models(model, dir, isHuman, shortName, bit_rate, sample_rate):
-    model_path = "data/models_CNN"
+    model_path = "models/pretrained_weights/"
     try:
         model_path = os.path.join(model_path, model)
         print(model_path)
@@ -229,21 +229,19 @@ def main():
         pass
     
     human_dirs = [
-        ["data/human_full", "full human set"],
-        ["data/human_converted", "converted human set"],
-        ["data/human_split", "split human set"],
+        #Enter your path here
+        ["data/human_split/human", "split human set"],
     ]
 
     ai_dirs = [
-        ["data/ai_full", "full AI set"],
-        ["data/ai_converted", "converted AI set"],
-        ["data/ai_split", "split AI set"],
+        #Enter your path here
+        ["data/ai_split/ai", "split AI set"],
     ]
 
     try:
-        for model in os.listdir("data/models_CNN"):
+        for model in os.listdir("models/pretrained_weights/"):
             print(f"Running model: {model}")
-            with open("data/CNN_Logs/final_results_model.txt", "a") as file:
+            with open("CNN_Logs/final_results_model.txt", "a") as file:
                 file.write(f"\n\nMODEL: {model}\n")
                 file.write(f"HUMAN RESULTS\n")
             start_time = time.time()
@@ -251,15 +249,16 @@ def main():
                 run_models(model=model, dir=directory[0], isHuman=True, shortName=directory[1], sample_rate=sample_rate_model, bit_rate=bit_rate_model)
             print(f"Time taken for human: {time.time() - start_time}")
             ai_start_time = time.time()
-            with open("data/Vit_Logs/final_results_model.txt", "a") as file:
+            with open("Vit_Logs/final_results_model.txt", "a") as file:
                 file.write("\nAI RESULTS\n")
             for directory in ai_dirs:
                 run_models(model=model, dir=directory[0], isHuman=False, shortName=directory[1], sample_rate=sample_rate_model, bit_rate=bit_rate_model)
             print(f"Time taken for ai: {time.time() - ai_start_time}")
             print(f"Time taken for both: {time.time() - start_time}")
-        clean_up()
+        #clean_up()
     except KeyboardInterrupt:
-        clean_up()
+        print("Keyboard Interrupt")
+        #clean_up()
 
 if __name__ == '__main__':
     main()

@@ -27,6 +27,15 @@ class CNNTest(nn.Module):
         self.bn5 = nn.BatchNorm2d(200)
         self.pool5 = nn.MaxPool2d(2)
 
+        self.conv6 = nn.Conv2d(200, 450, kernel_size=2, padding=1)
+        self.bn6 = nn.BatchNorm2d(450)
+        self.pool6 = nn.MaxPool2d(2)
+
+        self.conv7 = nn.Conv2d(450, 850, kernel_size=2, padding=1)
+        self.bn7 = nn.BatchNorm2d(850)
+        self.pool7 = nn.MaxPool2d(2)
+        
+
    
         self.drop = nn.Dropout(0.2)
         self.fc1 = nn.Linear(19200, 100)
@@ -38,6 +47,8 @@ class CNNTest(nn.Module):
         x = self.pool3(F.leaky_relu(self.bn3(self.conv3(x))))
         x = self.pool4(F.leaky_relu(self.bn4(self.conv4(x))))
         x = self.pool5(F.leaky_relu(self.bn5(self.conv5(x))))
+        #x = self.pool6(F.leaky_relu(self.bn6(self.conv6(x))))
+        #x = self.pool7(F.leaky_relu(self.bn7(self.conv7(x))))
         x = x.view(x.size(0), -1)
         x = F.leaky_relu(self.drop(self.fc1(x)))
         x = self.fc2(x)
