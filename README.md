@@ -56,6 +56,7 @@ Your dataset requires 4 directories:
 * Human Validation: A directory of mp3s that are human generated used for validation. 
 * AI Validation: A directory of mp3s that are AI generated used for validation. 
 
+#### Generate the Base File Structure:
 Once you have compiled your dataset, run the following:
 ```bash
 python -m data.generate_dirs
@@ -78,15 +79,17 @@ This will generate the following file structure:
 |----human_split/
 |    |-- Your converted human files split into 3 second clip.
 |----validation_set/
-     |-- ai_full/ ***put your full size ai validation mp3s here***
+     |-- ai_full/ ***put your ai validation mp3s here***
      |-- ai_converted/
      |-- ai_split/
-     |-- human_full/ ***put your full size human validation mp3s here***
+     |-- human_full/ ***put your human validation mp3s here***
      |-- human_converted/
      |-- human_split/
 
 ```
-Add your files where noted above.
+Add your files where noted above. 
+
+#### Converting and Splitting the Data:
  
 We then need to prepare your data for the model. Both the Vit and the CNN require the clips to be down sampled to 16k sample rate and 48 bit rate. This helps with generalization. Additionally, the clips need to be split into a consistent size for the model. The below script performs the conversion and splits the clips into 3 second sub-clips.  
 
