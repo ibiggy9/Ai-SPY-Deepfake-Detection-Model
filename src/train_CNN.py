@@ -250,10 +250,10 @@ def run(save_path, log_name, lr, bs, val_log_name, incorrect_v_log):
     num_epochs = 50
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=10, factor=0.1, verbose=True)
 
-    holdout_ai_directory = './data/validation_set/ai_split'
-    holdout_human_directory = './data/validation_set/human_split'
-    ai_directory = './data/ai_split'
-    human_directory = './data/human_split'
+    holdout_ai_directory = '/Users/main/Desktop/projects/businesses/AI-SPY/trainer/VoiceOnly/datasets/validation_3s/3s/ai'
+    holdout_human_directory = '/Users/main/Desktop/projects/businesses/AI-SPY/trainer/VoiceOnly/datasets/validation_3s/3s/human'
+    ai_directory = '/Users/main/Desktop/projects/businesses/AI-SPY/trainer/VoiceOnly/datasets/shortData_16_48k/3s/human'
+    human_directory = '/Users/main/Desktop/projects/businesses/AI-SPY/trainer/VoiceOnly/datasets/shortData_16_48k/3s/human'
 
     SEED = 42
     torch.manual_seed(SEED)
@@ -291,7 +291,7 @@ if __name__ == "__main__":
     os.system('touch ./CNN_Logs/regularlog1.txt')
     os.system('touch ./CNN_Logs/regular_validation1.txt')
     os.system('touch ./CNN_Logs/regular_incorrect_validation1.txt')
-    path1 = './data/models/training_models_CNN/regularModel1.pth'
+    path1 = 'models/Your_CNN_Model.pth'
     log1 = './CNN_Logs/regularlog1.txt'
     vlog1 = './CNN_Logs/regular_validation1.txt'
     ivlog1 = './CNN_Logs/regular_incorrect_validation1.txt'

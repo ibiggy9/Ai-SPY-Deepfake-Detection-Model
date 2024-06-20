@@ -11,7 +11,7 @@ from multiprocessing import Pool
 from tqdm import tqdm
 import time
 from models.cnn_model import CNNTest
-
+import argparse
 
 def load_model(model_path):
     print(model_path)
@@ -220,25 +220,46 @@ def run_models(model, dir, isHuman, shortName, bit_rate, sample_rate):
         print(e)
 
 def main():
-    sample_rate_model = 16000
-    bit_rate_model = '48k'
+    parser = argparse.ArgumentParser(description='Run inference on audio files using a CNN model.')
+    parser.add_argument('path', type=str, nargs='?', default=None, help='Path to the audio file or directory of audio files.')
+    parser.add_argument('--model', type=str, default='./models/pretrained_weights/CNN_Ai-SPY_2m.pth', help='Path to the model file.')
+    parser.add_argument('--sample_rate', type=int, default=16000, help='Sample rate for audio processing.')
+    parser.add_argument('--bit_rate', type=str, default='48k', help='Bit rate for audio conversion.')
+
+    args = parser.parse_args()
+    model_path = args.model
+    sample_rate = args.sample_rate
+    bit_rate = args.bit_rate
+    path = args.path
+
+    human_dirs = [
+        ["data/human_split/human", "split human set"],
+    ]
+
+    ai_dirs = [
+        ["data/ai_split/ai", "split AI set"],
+    ]
 
     try:
         os.remove("data/CNN_Logs/final_results_model.txt")
     except Exception as e:
         pass
-    
-    human_dirs = [
-        #Enter your path here
-        ["data/human_split/human", "split human set"],
-    ]
 
-    ai_dirs = [
-        #Enter your path here
-        ["data/ai_split/ai", "split AI set"],
-    ]
+    print(f"Loading Model: {model_path}")
+    model = load_model(model_path)
 
-    try:
+    if path:
+        if os.path.isfile(path):
+            result = process_audio_file(path, model, bit_rate, sample_rate)
+            print(json.dumps(result, indent=2))
+        elif os.path.isdir(path):
+            results = process_directory(path, model, sample_rate, bit_rate)
+            output_file_path = f'data/CNN_Logs/results_{uuid.uuid4().hex}.txt'
+            save_results_to_file(results, output_file_path)
+            print(f"Results saved to {output_file_path}")
+        else:
+            print(f"The path {path} is neither a file nor a directory. Please provide a valid path.")
+    else:
         for model in os.listdir("models/pretrained_weights/"):
             print(f"Running model: {model}")
             with open("CNN_Logs/final_results_model.txt", "a") as file:
@@ -246,19 +267,15 @@ def main():
                 file.write(f"HUMAN RESULTS\n")
             start_time = time.time()
             for directory in human_dirs:
-                run_models(model=model, dir=directory[0], isHuman=True, shortName=directory[1], sample_rate=sample_rate_model, bit_rate=bit_rate_model)
+                run_models(model=model, dir=directory[0], isHuman=True, shortName=directory[1], sample_rate=sample_rate, bit_rate=bit_rate)
             print(f"Time taken for human: {time.time() - start_time}")
             ai_start_time = time.time()
-            with open("Vit_Logs/final_results_model.txt", "a") as file:
+            with open("CNN_Logs/final_results_model.txt", "a") as file:
                 file.write("\nAI RESULTS\n")
             for directory in ai_dirs:
-                run_models(model=model, dir=directory[0], isHuman=False, shortName=directory[1], sample_rate=sample_rate_model, bit_rate=bit_rate_model)
+                run_models(model=model, dir=directory[0], isHuman=False, shortName=directory[1], sample_rate=sample_rate, bit_rate=bit_rate)
             print(f"Time taken for ai: {time.time() - ai_start_time}")
             print(f"Time taken for both: {time.time() - start_time}")
-        #clean_up()
-    except KeyboardInterrupt:
-        print("Keyboard Interrupt")
-        #clean_up()
 
 if __name__ == '__main__':
     main()

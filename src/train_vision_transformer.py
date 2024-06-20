@@ -266,10 +266,11 @@ def run_vit(save_path, log_name, lr, bs, val_log_name, incorrect_v_log, patch_si
     scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=10, factor=0.1, verbose=True)
 
     # Data directories
-    holdout_ai_directory = './data/validation_set/ai_split'
-    holdout_human_directory = './data/validation_set/human_split'
-    ai_directory = './data/ai_split'
-    human_directory = './data/human_split'
+    holdout_ai_directory = '/Users/main/Desktop/projects/businesses/AI-SPY/trainer/VoiceOnly/datasets/validation_3s/3s/ai'
+    holdout_human_directory = '/Users/main/Desktop/projects/businesses/AI-SPY/trainer/VoiceOnly/datasets/validation_3s/3s/human'
+    ai_directory = '/Users/main/Desktop/projects/businesses/AI-SPY/trainer/VoiceOnly/datasets/shortData_16_48k/3s/ai'
+    human_directory = '/Users/main/Desktop/projects/businesses/AI-SPY/trainer/VoiceOnly/datasets/shortData_16_48k/3s/human'
+
 
 
     # Seed for reproducibility

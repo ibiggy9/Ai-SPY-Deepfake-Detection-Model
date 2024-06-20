@@ -113,6 +113,8 @@ python -m src.train_CNN
 python -m src.train_vision_transformer
 ```
 
+The vision transformer will take significantly longer than the CNN to train
+
 ### Inference
 
 ## Contributing 
