@@ -14,7 +14,7 @@ from models.cnn_model import CNNTest
 import argparse
 
 def load_model(model_path):
-    print(model_path)
+    print(f"Loading model from: {model_path}")
     model = CNNTest()
     model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
     model.eval()
@@ -141,7 +141,8 @@ def process_directory(directory_path, model, sample_rate, bit_rate):
         results = []
         for result in tqdm(result_objects.get(), total=len(args)):
             results.append(result)
-    print(f"Result: {results}")
+    for result in results:
+        print(f"Result: {result}")
     return results
 
 def save_results_to_file(results, output_file_path):
@@ -158,8 +159,8 @@ def run_models(model, dir, isHuman, shortName, bit_rate, sample_rate):
     try:
         model_path = os.path.join(model_path, model)
         print(model_path)
-        output_file_path = f'data/CNN_Logs/results_{shortName}_model.txt'
-        final_results_path = f'data/CNN_Logs/final_results_model.txt'
+        output_file_path = f'CNN_Logs/results_{shortName}_model.txt'
+        final_results_path = f'CNN_Logs/final_results_model.txt'
         print("Loading Model")
         model = load_model(model_path)
         results = process_directory(dir, model, sample_rate=sample_rate, bit_rate=bit_rate)
@@ -205,24 +206,14 @@ def run_models(model, dir, isHuman, shortName, bit_rate, sample_rate):
             file.write(f"Total Predictions Correct: {correct_predictions} / {total_predictions}\n")
             file.write(f"Percent Correct: {percent_correct:.2f}%\n")
 
-        if ai_error or human_error:
-            print(f"Total AI Error: {sum(ai_error)}")
-            print(f"Average AI Error: {average_ai_error:.2f}")
-            print(f"Total Human Error: {sum(human_error)}")
-            print(f"Average Human Error: {average_human_error:.2f}")
-            print(f"Total Error: {sum(human_error) + sum(ai_error)}")
-            print(f"Total Average Error: {total_average_error:.2f}")
-            print(f"Percent Correct: {percent_correct}%")
-        else:
-            print("No data to calculate error.")
-
+        
     except Exception as e:
         print(e)
 
 def main():
     parser = argparse.ArgumentParser(description='Run inference on audio files using a CNN model.')
     parser.add_argument('path', type=str, nargs='?', default=None, help='Path to the audio file or directory of audio files.')
-    parser.add_argument('--model', type=str, default='./models/pretrained_weights/CNN_Ai-SPY_2m.pth', help='Path to the model file.')
+    parser.add_argument('--model', type=str, default='./models/pretrained_weights/CNN_Ai-SPY.pth', help='Path to the model file.')
     parser.add_argument('--sample_rate', type=int, default=16000, help='Sample rate for audio processing.')
     parser.add_argument('--bit_rate', type=str, default='48k', help='Bit rate for audio conversion.')
 
@@ -233,15 +224,17 @@ def main():
     path = args.path
 
     human_dirs = [
-        ["data/human_split/human", "split human set"],
+        
+        ["data/human_split", "split human set"],
     ]
 
     ai_dirs = [
-        ["data/ai_split/ai", "split AI set"],
+        
+        ["data/ai_split", "split AI set"],
     ]
 
     try:
-        os.remove("data/CNN_Logs/final_results_model.txt")
+        os.remove("CNN_Logs/final_results_model.txt")
     except Exception as e:
         pass
 
@@ -254,7 +247,7 @@ def main():
             print(json.dumps(result, indent=2))
         elif os.path.isdir(path):
             results = process_directory(path, model, sample_rate, bit_rate)
-            output_file_path = f'data/CNN_Logs/results_{uuid.uuid4().hex}.txt'
+            output_file_path = f'CNN_Logs/results_{uuid.uuid4().hex}.txt'
             save_results_to_file(results, output_file_path)
             print(f"Results saved to {output_file_path}")
         else:
@@ -279,3 +272,10 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+
+
+
+
+ 

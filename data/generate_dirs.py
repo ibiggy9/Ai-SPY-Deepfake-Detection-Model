@@ -14,7 +14,7 @@ class DirectoryGenerator:
     main():
         Creates the necessary directories for the audio data.
     """
-    def main():
+    def main(self):
         # Create directories
         paths = ['./data/ai_full', 
                 './data/human_full', 

@@ -12,15 +12,13 @@ import glob
 import numpy as np
 import signal
 from models.vit_model import VisionTransformer
+import argparse
 
-
-
-def load_model(model_path, patch_size=32, embedding_dim=256, num_heads=8, num_layers=4, num_classes=2):
+def load_model(model_path, patch_size=16, embedding_dim=512, num_heads=8, num_layers=8, num_classes=2):
     try:
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         model = VisionTransformer(patch_size, embedding_dim, num_heads, num_layers, num_classes, device=device)
         state_dict = torch.load(model_path, map_location=device)
-
         model.load_state_dict(state_dict, strict=False)
         model.eval()
         print("Model loaded successfully.")
@@ -29,29 +27,28 @@ def load_model(model_path, patch_size=32, embedding_dim=256, num_heads=8, num_la
         print(f"Error loading model: {e}")
         return None
 
-def preprocess_audio(audio_path, sr=16000, duration=3):
+def preprocess_audio(audio_path, sr=16000, duration=3, global_mean=-58.18715250929163, global_std=15.877255962380845):
     y, _ = librosa.load(audio_path, sr=sr)
+    y = librosa.util.fix_length(y, size=sr * duration)
+    y = np.clip(y, -1.0, 1.0)
     clips = [y[i:i + sr * duration] for i in range(0, len(y) - sr * duration + 1, sr * duration)]
+    
     processed_clips = []
-
     for clip in clips:
-        D = librosa.stft(clip, n_fft=1024, hop_length=256, win_length=1024, window='hann')
-        S_db = librosa.amplitude_to_db(np.abs(D), ref=np.max)
-        epsilon = 1e-6
-        S_db = (S_db - np.mean(S_db)) / (np.std(S_db) + epsilon)
-        S_db = S_db[:, :100 * duration]
+        S = np.abs(librosa.stft(clip))**2
+        S_db = librosa.power_to_db(S + 1e-10, ref=np.max)
+        S_db = (S_db - global_mean) / global_std
 
-        patch_size = 32
-        stride = 8
-        patches = []
-        for i in range(0, S_db.shape[1] - patch_size + 1, stride):
-            for j in range(0, S_db.shape[0] - patch_size + 1, stride):
-                patch = S_db[j:j + patch_size, i:i + patch_size]
-                patches.append(patch.flatten())
-        patches = np.array(patches)
-        spectrogram_tensor = torch.tensor(patches, dtype=torch.float32)
+        target_shape = (1025, 94)
+        if S_db.shape != target_shape:
+            S_db = np.pad(S_db, (
+                (0, max(0, target_shape[0] - S_db.shape[0])), 
+                (0, max(0, target_shape[1] - S_db.shape[1]))
+            ), mode='constant', constant_values=global_mean)
+            S_db = S_db[:target_shape[0], :target_shape[1]]
+        spectrogram_tensor = torch.tensor(S_db, dtype=torch.float32).unsqueeze(0)
         processed_clips.append(spectrogram_tensor)
-
+        
     return processed_clips
 
 def predict_neural_for_testing(clips, model):
@@ -62,6 +59,7 @@ def predict_neural_for_testing(clips, model):
     with torch.no_grad():
         for i, clip in enumerate(clips):
             try:
+                print(f"Processing clip {i+1}/{len(clips)}: shape={clip.shape}, dtype={clip.dtype}")
                 output = model(clip.unsqueeze(0))
                 probs = F.softmax(output, dim=1)
                 probability_ai = round(probs[0][0].item() * 100, 2)
@@ -83,7 +81,7 @@ def predict_neural_for_testing(clips, model):
                 results['chunk_results'].append(chunk_result)
                 overall_probs.append(probability_ai)
             except Exception as e:
-                print(e)
+                print(f"Error processing clip {i+1}: {e}")
 
         ai_chunk_count = sum(1 for result in results['chunk_results'] if result['prediction'] == 'ai')
         percentage_ai_chunks = (ai_chunk_count / len(clips)) * 100
@@ -101,15 +99,15 @@ def predict_neural_for_testing(clips, model):
         })
 
         return results
-
+    
 def convert_to_mp3(input_file, output_file, bit_rate="", sample_rate=16000):
     audio = AudioSegment.from_file(input_file)
     audio.export(output_file, format="mp3", bitrate=bit_rate, parameters=["-ar", str(sample_rate)])
     return output_file
 
-def process_audio_file(audio_file, model, bit_rate, sample_rate):
+def process_audio_file(audio_file, model, sample_rate, bit_rate):
     try:
-        audio_file_path = f"data/Vit_Logs/{uuid.uuid4()}.mp3"
+        audio_file_path = f"Vit_Logs/{uuid.uuid4()}.mp3"
         converted_audio = convert_to_mp3(audio_file, audio_file_path, bit_rate=bit_rate, sample_rate=sample_rate)
         clips = preprocess_audio(converted_audio, sr=sample_rate)
 
@@ -140,7 +138,7 @@ def process_directory(directory_path, model, sample_rate, bit_rate):
     mp3_files = glob.glob(os.path.join(directory_path, '*'))
     audio_files = mp3_files
     print(f"Current Dir {directory_path}")
-    args = [(audio_file, model, bit_rate, sample_rate) for audio_file in audio_files]
+    args = [(audio_file, model, sample_rate, bit_rate) for audio_file in audio_files]
 
     with Pool(processes=24) as pool:
         result_objects = pool.starmap_async(process_audio_file, args)
@@ -159,13 +157,12 @@ def save_results_to_file(results, output_file_path):
             except Exception as e:
                 print(f"Error writing result to file: {e}")
 
-def run_models(model, dir, isHuman, shortName, bit_rate, sample_rate):
-    model_path = "data/models"
+def run_models(model, dir, isHuman, shortName, sample_rate, bit_rate):
+    model_path = "./models/pretrained_weights/Vit_Ai-SPY.pth"
     try:
-        model_path = os.path.join(model_path, model)
         print(model_path)
-        output_file_path = f'data/Vit_Logs/results_{shortName}_model.txt'
-        final_results_path = f'data/Vit_Logs/final_results_model.txt'
+        output_file_path = f'Vit_Logs/results_{shortName}_model.txt'
+        final_results_path = f'Vit_Logs/final_results_model.txt'
         print("Loading Model")
         model = load_model(model_path)
         results = process_directory(dir, model, sample_rate=sample_rate, bit_rate=bit_rate)
@@ -223,56 +220,61 @@ def run_models(model, dir, isHuman, shortName, bit_rate, sample_rate):
             print("No data to calculate error.")
 
     except Exception as e:
+        print("error 2")
         print(e)
 
 def main():
-    sample_rate_model = 16000
-    bit_rate_model = '48k'
+    parser = argparse.ArgumentParser(description='Run inference on audio files using a Vision Transformer model.')
+    parser.add_argument('path', type=str, nargs='?', default=None, help='Path to the audio file or directory of audio files.')
+    parser.add_argument('--model', type=str, default='./models/pretrained_weights/Vit_Ai-SPY.pth', help='Path to the model file.')
+    parser.add_argument('--sample_rate', type=int, default=16000, help='Sample rate for audio processing.')
+    parser.add_argument('--bit_rate', type=str, default='48k', help='Bit rate for audio conversion.')
 
-    try:
-        os.remove("data/Vit_Logs/final_results_model.txt")
-    except Exception as e:
-        pass
-    
+    args = parser.parse_args()
+    model_path = args.model
+    sample_rate = args.sample_rate
+    bit_rate = args.bit_rate
+    path = args.path
+
     human_dirs = [
-        ["data/human_full", "full human set"],
-        ["data/human_converted", "converted human set"],
+        
         ["data/human_split", "split human set"],
     ]
 
     ai_dirs = [
-        ["data/ai_full", "full AI set"],
-        ["data/ai_converted", "converted AI set"],
+        
         ["data/ai_split", "split AI set"],
     ]
 
     def signal_handler(sig, frame):
         print('KeyboardInterrupt is caught')
-        clean_up()
         exit(0)
 
     signal.signal(signal.SIGINT, signal_handler)
 
     try:
-        for model in os.listdir("data/models"):
-            print(f"Running model: {model}")
-            with open("data/Vit_Logs/final_results_model.txt", "a") as file:
-                file.write(f"\n\nMODEL: {model}\n")
-                file.write(f"HUMAN RESULTS\n")
-            start_time = time.time()
-            for directory in human_dirs:
-                run_models(model=model, dir=directory[0], isHuman=True, shortName=directory[1], sample_rate=sample_rate_model, bit_rate=bit_rate_model)
-            print(f"Time taken for human: {time.time() - start_time}")
-            ai_start_time = time.time()
-            with open("data/Vit_Logs/final_results_model.txt", "a") as file:
-                file.write("\nAI RESULTS\n")
-            for directory in ai_dirs:
-                run_models(model=model, dir=directory[0], isHuman=False, shortName=directory[1], sample_rate=sample_rate_model, bit_rate=bit_rate_model)
-            print(f"Time taken for ai: {time.time() - ai_start_time}")
-            print(f"Time taken for both: {time.time() - start_time}")
-        clean_up()
-    except KeyboardInterrupt:
-        clean_up()
+        os.remove("./Vit_Logs/final_results_model.txt")
+    except Exception as e:
+        pass
+
+    print(f"Loading Model: {model_path}")
+    model = load_model(model_path)
+
+    if path:
+        if os.path.isfile(path):
+            result = process_audio_file(path, model, sample_rate, bit_rate)
+            print(json.dumps(result, indent=2))
+        elif os.path.isdir(path):
+            results = process_directory(path, model, sample_rate, bit_rate)
+            output_file_path = f'Vit_Logs/results_{uuid.uuid4().hex}.txt'
+            save_results_to_file(results, output_file_path)
+            print(f"Results saved to {output_file_path}")
+        else:
+            print(f"The path {path} is neither a file nor a directory. Please provide a valid path.")
+    else:
+        for directory in human_dirs + ai_dirs:
+            isHuman = "human" in directory[1]
+            run_models(model=model_path, dir=directory[0], isHuman=isHuman, shortName=directory[1], sample_rate=sample_rate, bit_rate=bit_rate)
 
 if __name__ == '__main__':
     main()

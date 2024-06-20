@@ -4,21 +4,11 @@ import torch
 import librosa
 from torch.utils.data import DataLoader, random_split
 import torch.nn as nn
-import torch.nn.functional as F
 import torch.optim as optim
 import torch
-import matplotlib.pyplot as plt
 import numpy as np
 import random
-from sklearn.metrics import matthews_corrcoef, roc_auc_score, f1_score, confusion_matrix
-from google.cloud import storage
-from google.auth.exceptions import RefreshError
-from google.auth.transport.requests import Request
-from torch.utils.data._utils.collate import default_collate
 import glob
-import torchvision.models as models
-from torch.nn.functional import cross_entropy
-from sklearn.metrics import precision_recall_fscore_support, roc_auc_score
 import torch.optim.lr_scheduler as lr_scheduler
 from scipy.signal import butter, lfilter
 from models.vit_model import VisionTransformer
@@ -266,10 +256,10 @@ def run_vit(save_path, log_name, lr, bs, val_log_name, incorrect_v_log, patch_si
     scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=10, factor=0.1, verbose=True)
 
     # Data directories
-    holdout_ai_directory = '/Users/main/Desktop/projects/businesses/AI-SPY/trainer/VoiceOnly/datasets/validation_3s/3s/ai'
-    holdout_human_directory = '/Users/main/Desktop/projects/businesses/AI-SPY/trainer/VoiceOnly/datasets/validation_3s/3s/human'
-    ai_directory = '/Users/main/Desktop/projects/businesses/AI-SPY/trainer/VoiceOnly/datasets/shortData_16_48k/3s/ai'
-    human_directory = '/Users/main/Desktop/projects/businesses/AI-SPY/trainer/VoiceOnly/datasets/shortData_16_48k/3s/human'
+    holdout_ai_directory = './data/validation_set/ai_split'
+    holdout_human_directory = './data/validation_set/human_split'
+    ai_directory = './data/ai_split'
+    human_directory = './data/human_split'
 
 
 
