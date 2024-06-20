@@ -157,6 +157,21 @@ python -m src.train_vision_transformer
 
 Note: The vision transformer will take significantly longer and will require more compute than the CNN to train.
 
+You can set the number of epochs in the code and its up to you how you want to tune the hyperparameters. The default values in this repo were the result of a lengthy randomized search.
+
+You will also note that there are the following values in the script:
+```bash
+self.global_mean = -58.18715250929163
+self.global_std = 15.877255962380845 
+```
+These were values set on our internal dataset and its very likely you will need different values here to get the best results. To get values for your dataset, we have included a helper script:
+```bash
+python getGlobalStats.py
+```
+
+## Evaluation
+
+
 ## License 
 MIT License
 
