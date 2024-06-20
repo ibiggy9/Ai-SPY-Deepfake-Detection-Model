@@ -46,12 +46,13 @@ Our pretrained weights were trained on a total of 600 hours of audio, 300 for hu
 
 ### Data Preparation
 Once you have compiled your dataset, put those in a subdirectory in the data directory called "ai_full" and "human_full" respectively. 
+```bash
 /data
 |--ai_full/
     |-- a directory of ai-generated mp3s of any length and quality.
 |--human_full/
     |-- a directory of human-generated mp3s of any length and quality.
-
+```
 
 
 ### Training & Evaluation
