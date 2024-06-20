@@ -66,22 +66,22 @@ This will generate the following file structure:
 /data
 
 |----ai_full/
-|    |-- *put your ai-generated mp3s of any length and quality here.*
+|    |-- ***put your ai-generated mp3s of any length and quality here.***
 |----ai_converted/
 |    |-- Your original ai files converted to 16k 48kbps
 |----ai_split/
 |    |-- Your converted ai files split into 3 second clip. 
 |----human_full/
-|    |-- *put your ai-generated mp3s of any length and quality here.*
+|    |-- ***put your ai-generated mp3s of any length and quality here.***
 |----human_converted/
 |    |-- Your original human files converted to 16k 48kbps
 |----human_split/
 |    |-- Your converted human files split into 3 second clip.
 |----validation_set/
-     |-- ai_full/ *put your full size ai validation mp3s here*
+     |-- ai_full/ ***put your full size ai validation mp3s here***
      |-- ai_converted/
      |-- ai_split/
-     |-- human_full/ *put your full size human validation mp3s here*
+     |-- human_full/ ***put your full size human validation mp3s here***
      |-- human_converted/
      |-- human_split/
 
