@@ -49,9 +49,9 @@ Once you have compiled your dataset, put those in a subdirectory in the data dir
 ```bash
 /data
 |----ai_full/
-|    |-- a directory of ai-generated mp3s of any length and quality.
+|    |-- ai-generated mp3s of any length and quality.
 |----human_full/
-|    |-- a directory of human-generated mp3s of any length and quality.
+|    |-- human-generated mp3s of any length and quality.
 ```
 
 
