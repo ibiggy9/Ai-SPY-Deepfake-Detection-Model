@@ -25,9 +25,9 @@ pip install -r requirements.txt
 
 ## Training
 
-### Dataset & Data Preparation
+### Dataset & Data Preparation:
 
-#### A Note on Dataset and Data Quality For Training. 
+#### A Note on Dataset and Data Quality For Training:
 This repo does not come with sample data. To train your own model, you need to supply your own dataset. These can be found all over the internet, but this one is fairly robust [this data set](https://www.kaggle.com/datasets/birdy654/deep-voice-deepfake-voice-recognition). 
 
 It is important to note however, that for practical applications, the quality of your dataset is very important. Both convolutional neural networks and vision transformers can generalize to a degree, but each deepfake model has a slightly different signal and they are reducing in strength as these models become more sophisticated. Consistently revisiting your dataset, how recently the data has been produced and the total composition of the dataset. 
@@ -46,7 +46,7 @@ On the human side of the dataset, the helpful ontological concept is production 
 * Outdoor recordings of any kind (applause and wind noise really help bolster generalization)
 * Recordings with echo or reverb
 
-#### A Note on Dataset Size
+#### A Note on Dataset Size:
 Our pretrained weights were trained on a total of 600 hours of audio, 300 for human and 300 for AI. We have found that you can get similar performance with just 7.5 hours per class or 15 hours total for the convolutional network, while the vision transformer benefits from at least 25 hours per class to get the same performance. 
 
 ### Preprocessing Your Dataset.
@@ -66,48 +66,34 @@ This will generate the following file structure:
 /data
 
 |----ai_full/
-|    |-- ai-generated mp3s of any length and quality.
+|    |-- *put your ai-generated mp3s of any length and quality here.*
 |----ai_converted/
 |    |-- Your original ai files converted to 16k 48kbps
 |----ai_split/
 |    |-- Your converted ai files split into 3 second clip. 
 |----human_full/
-|    |-- human-generated mp3s of any length and quality.
+|    |-- *put your ai-generated mp3s of any length and quality here.*
 |----human_converted/
 |    |-- Your original human files converted to 16k 48kbps
 |----human_split/
 |    |-- Your converted human files split into 3 second clip.
 |----validation_set/
-     |-- ai_full/ <put your full size ai validation mp3s here>
+     |-- ai_full/ *put your full size ai validation mp3s here*
      |-- ai_converted/
      |-- ai_split/
-     |-- human_full/ <put your full size human validation mp3s here>
+     |-- human_full/ *put your full size human validation mp3s here*
      |-- human_converted/
      |-- human_split/
 
 ```
-
+Add your files where noted above.
+ 
 We then need to prepare your data for the model. Both the Vit and the CNN require the clips to be down sampled to 16k sample rate and 48 bit rate. This helps with generalization. Additionally, the clips need to be split into a consistent size for the model. The below script performs the conversion and splits the clips into 3 second sub-clips.  
 
 ```bash
 python -m data.convert_and_divide
 ```
-Running this will result in the following file structure:
-```bash
-/data
-|----ai_full/
-|    |-- ai-generated mp3s of any length and quality.
-|----ai_converted/
-|    |-- Your original ai files converted to 16k 48kbps
-|----ai_split/
-|    |-- Your converted ai files split into 3 second clip. 
-|----human_full/
-|    |-- human-generated mp3s of any length and quality.
-|----human_converted/
-|    |-- Your original human files converted to 16k 48kbps
-|----human_split/
-|    |-- Your converted human files split into 3 second clip.
-```
+
 ***Your data is now ready for training.***
 
 
