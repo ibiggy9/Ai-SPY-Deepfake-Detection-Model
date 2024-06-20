@@ -8,6 +8,9 @@ To get started, make sure you have Python 3.10.6 installed. You can check your P
 ```bash
 python --version
 ```
+If you don't have Python 3.10.6 installed, you can download it from [python.org](https://www.python.org). 
+
+Clone the repository and install the required packages:
 
 ```bash
 git clone https://github.com/yourusername/audio-deepfake-detection.git
