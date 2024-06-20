@@ -172,10 +172,10 @@ This will run on whatever is in your human_split and ai_split directories so mak
 ```bash
 /data/global_stats.txt
 ```
-
+Add those values to the training code before running. 
 
 ## Evaluation
-
+More to come here. We are working on a few programs that make it easy to evaluate your model beyond the metrics that are already built into training. 
 
 ## License 
 MIT License
