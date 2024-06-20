@@ -168,6 +168,11 @@ These were values set on our internal dataset and its very likely you will need 
 ```bash
 python getGlobalStats.py
 ```
+This will run on whatever is in your human_split and ai_split directories so make sure you've already converted and split your data. The results will be found in:
+```bash
+/data/global_stats.txt
+```
+
 
 ## Evaluation
 
