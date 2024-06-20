@@ -21,9 +21,11 @@ pip install -r requirements.txt
 ## Usage
 xyz 
 
-### Training
-abc
-### Evaluation
+## Data Preparation
+
+
+
+### Training & Evaluation
 abc
 
 ### Inference
