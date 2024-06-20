@@ -1,1 +1,0 @@
-Put a list of 3 second AI mp3s in the AI directory and put 3 second human mp3s in the human directory
