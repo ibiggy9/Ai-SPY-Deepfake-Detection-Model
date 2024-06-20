@@ -4,7 +4,6 @@ import torch
 import librosa
 from torch.utils.data import DataLoader, random_split
 import torch.nn as nn
-import io
 import torch.nn.functional as F
 import torch.optim as optim
 import torch
@@ -19,11 +18,8 @@ from torch.utils.data._utils.collate import default_collate
 import glob
 import torchvision.models as models
 from torch.nn.functional import cross_entropy
-import cv2
-from sklearn.model_selection import KFold
 from sklearn.metrics import precision_recall_fscore_support, roc_auc_score
 import torch.optim.lr_scheduler as lr_scheduler
-import math
 from scipy.signal import butter, lfilter
 from models.vit_model import VisionTransformer
 
