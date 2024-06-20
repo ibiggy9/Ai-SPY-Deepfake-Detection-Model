@@ -80,7 +80,7 @@ Running this will result in the following file structure:
 |----human_split/
 |    |-- Your converted human files split into 3 second clip.
 ```
-**Your data is now ready for training**
+***Your data is now ready for training***
 
 
 ### Training & Evaluation
