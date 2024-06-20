@@ -1,3 +1,0 @@
-
-Validation 0: Average loss: 0.0431, Accuracy: 38600/57184 (68%), MCC: 0.010731412819672438, F1: 0.5441848304897405, Average Log Loss: 0.0, Confusion Matrix: [[    6 18582]
- [    2 38594]]
