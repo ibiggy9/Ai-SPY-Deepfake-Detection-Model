@@ -50,19 +50,47 @@ On the human side of the dataset, the helpful ontological concept is production 
 Our pretrained weights were trained on a total of 600 hours of audio, 300 for human and 300 for AI. We have found that you can get similar performance with just 7.5 hours per class or 15 hours total for the convolutional network, while the vision transformer benefits from at least 25 hours per class to get the same performance. 
 
 ### Preprocessing Your Dataset.
-Once you have compiled your dataset, put those in a subdirectory in the data directory called "ai_full" and "human_full" respectively. 
+Your dataset requires 4 directories:
+* Human Training: A directory of mp3s that are human generated and used for training. 
+* AI Training: A directory of mp3s that are AI generated and used for training.
+* Human Validation: A directory of mp3s that are human generated used for validation. 
+* AI Validation: A directory of mp3s that are AI generated used for validation. 
+
+Once you have compiled your dataset, run the following:
+```bash
+python -m data.generate_dirs
+```
+
+This will generate the following file structure:
 ```bash
 /data
+
 |----ai_full/
 |    |-- ai-generated mp3s of any length and quality.
+|----ai_converted/
+|    |-- Your original ai files converted to 16k 48kbps
+|----ai_split/
+|    |-- Your converted ai files split into 3 second clip. 
 |----human_full/
 |    |-- human-generated mp3s of any length and quality.
+|----human_converted/
+|    |-- Your original human files converted to 16k 48kbps
+|----human_split/
+|    |-- Your converted human files split into 3 second clip.
+|----validation_set/
+     |-- ai_full/ <put your full size ai validation mp3s here>
+     |-- ai_converted/
+     |-- ai_split/
+     |-- human_full/ <put your full size human validation mp3s here>
+     |-- human_converted/
+     |-- human_split/
+
 ```
 
 We then need to prepare your data for the model. Both the Vit and the CNN require the clips to be down sampled to 16k sample rate and 48 bit rate. This helps with generalization. Additionally, the clips need to be split into a consistent size for the model. The below script performs the conversion and splits the clips into 3 second sub-clips.  
 
 ```bash
-python -m data.convert_and_divide.py
+python -m data.convert_and_divide
 ```
 Running this will result in the following file structure:
 ```bash
@@ -80,11 +108,21 @@ Running this will result in the following file structure:
 |----human_split/
 |    |-- Your converted human files split into 3 second clip.
 ```
-***Your data is now ready for training***
+***Your data is now ready for training.***
 
 
 ### Training & Evaluation
-ab
+To train a model on your dataset, do the following. 
+
+**For CNN:**
+```bash
+python -m src.train_CNN
+```
+
+**For Vision Transformer:**
+```bash
+python -m src.train_vision_transformer
+```
 
 ### Inference
 
