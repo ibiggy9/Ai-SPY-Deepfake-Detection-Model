@@ -1,4 +1,0 @@
-
-
-MODEL: CNN_Ai-SPY_2m.pth
-HUMAN RESULTS

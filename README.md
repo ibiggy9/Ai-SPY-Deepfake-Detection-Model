@@ -21,7 +21,49 @@ pip install -r requirements.txt
 ## Usage
 
 ### Using Pre-Trained Weights to Make a Prediction:
-Next
+To run the model on a single file, you need to clone the repo using the instructions above then, from the root directory, run:
+```bash
+python -m src.inference_CNN <path to an mp3 file>
+```
+Results will look like this:
+```bash
+{
+  "name": "/your/path/to/the/file/bradmondonyc_0851551530_musicaldown.com_37k_22050_1ch.mp3",
+  "Percent_AI": 0.0,
+  "Percent_Human": 100.0,
+  "Prediction": "human"
+}
+```
+To run the model on an entire directory, you need to adjust the following code in inference_CNN.py:
+```python
+     human_dirs = [
+          
+          ["data/human_split", "split human set"],
+     ]
+
+     ai_dirs = [
+          
+          ["data/ai_split", "split AI set"],
+     ]
+
+```
+Place the path to your directory in either human_dirs or ai_dirs. This was initially built to test how it performed on known human or ai files so the final_results in the CNN_logs will not be accurate. However, the console will print out the prediction for each file in the directory upon running this. Once you have updated the paths above, you just need to run:
+
+```bash
+python -m src.inference_CNN
+```
+
+You can do the exact same thing with the vision transformer, pointing to a single file or an entire directory by running:
+```bash
+python -m src.inference_ViT <path to your file>
+```
+or
+```bash
+python -m src.inference_ViT
+```
+After adjusting the paths in inference_ViT.py.
+
+
 
 ## Training
 
