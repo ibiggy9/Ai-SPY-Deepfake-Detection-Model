@@ -54,6 +54,10 @@ Once you have compiled your dataset, put those in a subdirectory in the data dir
 |    |-- human-generated mp3s of any length and quality.
 ```
 
+Then run:
+```bash
+python -m data.convert_and_divide.py
+```
 
 ### Training & Evaluation
 ab

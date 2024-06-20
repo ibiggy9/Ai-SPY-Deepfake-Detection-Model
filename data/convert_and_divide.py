@@ -124,20 +124,11 @@ class AudioSplitter:
             list(tqdm(p.imap(self.split_song, tasks), total=len(tasks)))
 
 
-def run_audio_conversion_and_splitting():
+def run_audio_conversion_and_splitting(input_dir, converted_dir, split_dir):
     """
     Runs the audio conversion and splitting processes on the specified directories.
     """
-    input_dir = './data/ai_full'
-    converted_dir = './data/ai_converted'
-    split_dir = './data/ai_split'
-
-
-    '''
-    input_dir = './data/human_full'
-    converted_dir = './data/human_converted'
-    split_dir = './data/human_split'
-    '''
+ 
 
     # Convert audio files
     converter = AudioConverter(input_dir, converted_dir, new_sample_rate=16000, new_bit_rate=48)
@@ -148,4 +139,20 @@ def run_audio_conversion_and_splitting():
     splitter.process_directory()
 
 if __name__ == "__main__":
-    run_audio_conversion_and_splitting()
+    paths = ['./data/ai_full', './data/human_full', './data/ai_converted', './data/human_converted', './data/ai_split', './data/human_split']
+    for path in paths:
+        if not os.path.exists(path):
+            os.makedirs(path)
+            
+    input_dir_ai = './data/ai_full'
+    converted_dir_ai = './data/ai_converted'
+    split_dir_ai = './data/ai_split'
+
+    input_dir_human = './data/human_full'
+    converted_dir_human = './data/human_converted'
+    split_dir_human = './data/human_split'
+
+
+
+    run_audio_conversion_and_splitting(input_dir=input_dir_ai, converted_dir=converted_dir_ai, split_dir=split_dir_ai)  
+    run_audio_conversion_and_splitting(input_dir=input_dir_human, converted_dir=converted_dir_human, split_dir=split_dir_human)
