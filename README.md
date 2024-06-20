@@ -70,7 +70,7 @@ After adjusting the paths in inference_ViT.py.
 ### Dataset & Data Preparation:
 
 #### A Note on Dataset and Data Quality For Training:
-This repo does not come with sample data. To train your own model, you need to supply your own dataset. These can be found all over the internet, but this one is fairly robust [this data set](https://www.kaggle.com/datasets/birdy654/deep-voice-deepfake-voice-recognition). 
+This repo does not come with sample data. To train your own model, you need to supply your own dataset. These can be found all over the internet, but [this one is fairly robust](https://www.kaggle.com/datasets/birdy654/deep-voice-deepfake-voice-recognition). 
 
 It is important to note however, that for practical applications, the quality of your dataset is very important. Both convolutional neural networks and vision transformers can generalize to a degree, but each deepfake model has a slightly different signal and they are reducing in strength as these models become more sophisticated. Consistently revisiting your dataset, how recently the data has been produced and the total composition of the dataset. 
 
@@ -155,7 +155,7 @@ python -m src.train_CNN
 python -m src.train_vision_transformer
 ```
 
-The vision transformer will take significantly longer than the CNN to train
+Note: The vision transformer will take significantly longer and will require more compute than the CNN to train.
 
 ## License 
 MIT License
