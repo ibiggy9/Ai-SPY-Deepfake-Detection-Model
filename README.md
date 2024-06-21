@@ -1,7 +1,7 @@
 # Audio Deepfake Detection
 
 ## Overview 
-This project foucses on detecting audio deep fakes with deep learning
+This project focuses on detecting audio deep fakes with deep learning
 
 ## Installation
 To get started, make sure you have Python 3.10.6 installed. You can check your Python version with:
