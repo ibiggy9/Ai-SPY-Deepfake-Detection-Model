@@ -210,5 +210,32 @@ Test set: Average loss: 0.0049, Accuracy: 6197/6409 (97%), MCC: 0.93389162026034
 
 ```
 
+
+"regular_validation.txt" and "vision_transfomer_val_log" show the performance across these same metrics on the validation/holdout set. It looks like this
+```bash
+
+Validation 0: Average loss: 0.0640, Accuracy: 39282/48986 (80%), MCC: 0.6064966263832574, F1: 0.8021682895620511, Average Log Loss: 0.0, Confusion Matrix: [[20393  5921]
+ [ 3783 18889]]
+
+Validation 1: Average loss: 0.0340, Accuracy: 42899/48986 (88%), MCC: 0.7603609790126691, F1: 0.8737551813058162, Average Log Loss: 0.0, Confusion Matrix: [[25543   768]
+ [ 5319 17356]]
+
+Validation 2: Average loss: 0.0332, Accuracy: 43279/48986 (88%), MCC: 0.770930759321472, F1: 0.8823150888153563, Average Log Loss: 0.0, Confusion Matrix: [[25154  1157]
+ [ 4550 18125]]
+
+Validation 3: Average loss: 0.0265, Accuracy: 44281/48986 (90%), MCC: 0.8077568825855087, F1: 0.9035958204785868, Average Log Loss: 0.0, Confusion Matrix: [[24789  1522]
+ [ 3183 19492]]
+```
+Finally, both "vision_transformer_incorrect.txt" and "regular_incorrect_validation.txt" show a list of audio files that model got incorrect in your holdout set. This allows you to look for patterns or biases between the set of filies that it got wrong. It is formatted like this:
+```bash
+<path to your file>/file_name.mp3
+<path to your file>/file_name.mp3
+<path to your file>/file_name.mp3
+<path to your file>/file_name.mp3
+
+```
+
+
+
 ## License 
 MIT 
