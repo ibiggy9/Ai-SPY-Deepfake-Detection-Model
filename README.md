@@ -232,9 +232,10 @@ Finally, both "vision_transformer_incorrect.txt" and "regular_incorrect_validati
 <path to your file>/file_name.mp3
 <path to your file>/file_name.mp3
 <path to your file>/file_name.mp3
-
 ```
-
+### A Few Tips Regarding Evaluation
+Across our many attempts to make this as a accurate as possible for our users, it is abundantly clear that robust testing is essential. Our model validation included the above but also included testing the model across many subsets of audio. We recommend you do this too for any model you decide to train. You don't just want to test across sound domains but also editing and compression domains. Our basic mental model for this is as follows
+*<sound domain> + <compression domain> + (if ai) <model>*
 
 
 ## License 
