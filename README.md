@@ -68,6 +68,9 @@ After adjusting the paths in inference_ViT.py.
 
 ## Training
 
+### CNN Model Architecture:
+[CNN Architecture](assets/CNN_Diagram.png)
+
 ### Dataset & Data Preparation:
 
 #### A Note on Dataset and Data Quality For Training:
