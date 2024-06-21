@@ -175,7 +175,40 @@ This will run on whatever is in your human_split and ai_split directories so mak
 Add those values to the training code before running. 
 
 ## Evaluation
-More to come here. We are working on a few programs that make it easy to evaluate your model beyond the metrics that are already built into training. 
+As your model progresses through training, completing each epoch, it will produce a number of highly valuable logs for you to monitor how it is performing:
+```bash
+|--CNNLogs/
+|-----|regularlog1.txt
+|-----|regular_validation1.txt
+|-----|regular_incorrect_validation1.txt
+
+|--Vit_Logs/
+|-----|vision_transformer_log.txt
+|-----|vision_transformer_val_log.txt
+|-----|vision_transformer_incorrect.txt
+```
+"
+Both "regularlog1.txt" and "vision_transformer_log.txt" show the performance on the test set with one entry per epoch. It looks like this:
+```bash
+Test set: Average loss: 0.0106, Accuracy: 5966/6409 (93%), MCC: 0.8634529465657442, F1: 0.9309093045664938, Average Log Loss: 0.010582094663603851, Confusion Matrix: [[3030  319]
+ [ 124 2936]], Precision:0.9019969278033794, Recall: 0.9594771241830066, ROC AUC: 0.9841980924946868
+
+Test set: Average loss: 0.0074, Accuracy: 6102/6409 (95%), MCC: 0.9041219458129061, F1: 0.9521099989618251, Average Log Loss: 0.007391080678202168, Confusion Matrix: [[3176  173]
+ [ 134 2926]], Precision:0.9441755404969345, Recall: 0.9562091503267974, ROC AUC: 0.9922004812674546
+
+Test set: Average loss: 0.0076, Accuracy: 6082/6409 (95%), MCC: 0.9002462411825667, F1: 0.9489962837124791, Average Log Loss: 0.007588067556318564, Confusion Matrix: [[3074  275]
+ [  52 3008]], Precision:0.9162351507767286, Recall: 0.9830065359477124, ROC AUC: 0.9934047232907296
+
+Test set: Average loss: 0.0061, Accuracy: 6143/6409 (96%), MCC: 0.9172367233420389, F1: 0.9585132827983928, Average Log Loss: 0.006140751526416011, Confusion Matrix: [[3174  175]
+ [  91 2969]], Precision:0.9443384223918575, Recall: 0.9702614379084967, ROC AUC: 0.9944487867805627
+
+Test set: Average loss: 0.0062, Accuracy: 6144/6409 (96%), MCC: 0.9182448766863428, F1: 0.9586729250733522, Average Log Loss: 0.006216406494135986, Confusion Matrix: [[3144  205]
+ [  60 3000]], Precision:0.9360374414976599, Recall: 0.9803921568627451, ROC AUC: 0.9948764824930669
+
+Test set: Average loss: 0.0049, Accuracy: 6197/6409 (97%), MCC: 0.9338916202603493, F1: 0.9669317498054839, Average Log Loss: 0.004942114109053605, Confusion Matrix: [[3216  133]
+ [  79 2981]], Precision:0.9572896596017983, Recall: 0.9741830065359477, ROC AUC: 0.996283448185684
+
+```
 
 ## License 
 MIT 
