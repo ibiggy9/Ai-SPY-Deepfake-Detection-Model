@@ -3,6 +3,7 @@ import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from models.vit_model import VisionTransformer
+from src.train_vision_transformer import AudioDatasetForViT
 
 class TestAudioDatasetForViT(unittest.TestCase):
 

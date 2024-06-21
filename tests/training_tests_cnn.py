@@ -3,6 +3,7 @@ import torch
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from models.cnn_model import CNNTest
+from src.train_CNN import AudioDataset
 
 class TestAudioDataset(unittest.TestCase):
 
