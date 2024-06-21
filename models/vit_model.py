@@ -36,6 +36,7 @@ class VisionTransformer(nn.Module):
             dim_feedforward=embedding_dim * 4, 
             batch_first=True, 
             dropout=0.1, 
+            activation='gelu',
             layer_norm_eps=1e-6
         ).to(device)
         

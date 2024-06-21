@@ -71,6 +71,10 @@ After adjusting the paths in inference_ViT.py.
 ### CNN Model Architecture:
 ![CNN Architecture](assets/CNN_Diagram.png)
 
+## Vision Transformer Architecture:
+![Vision Transformer](assets/Vision_Transformer_Diagram.png)
+
+
 ### Dataset & Data Preparation:
 
 #### A Note on Dataset and Data Quality For Training:
