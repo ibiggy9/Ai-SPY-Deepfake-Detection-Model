@@ -88,7 +88,7 @@ def predict_neural_for_testing(clips, model):
         else:
             overall_prediction = 'human'
 
-        print(overall_prediction)
+        print(f"Overall prediction: {overall_prediction}")
         results.update({
             "status": "success",
             "prediction": overall_prediction
@@ -272,10 +272,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
- 

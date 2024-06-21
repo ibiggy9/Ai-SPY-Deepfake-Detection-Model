@@ -4,11 +4,11 @@
 Ai-SPY is a company that focuses on deepfake detection for a better more genuine internet. This repo provides access to pretrained_weights for a convolutional net and vision transformer so you can check your own audio files for deepfakes. You can also train your own model and evaluate it with the code in this repo. 
 
 ## Installation
-To get started, make sure you have Python 3.10.6 installed. You can check your Python version with:
+To get started, make sure you have Python 3.10+ installed. You can check your Python version with:
 ```bash
 python --version
 ```
-If you don't have Python 3.10.6 installed, you can download it from [python.org](https://www.python.org). 
+If you don't have Python 3.10+ installed, you can download it from [python.org](https://www.python.org). 
 
 Clone the repository and install the required packages:
 
@@ -72,7 +72,7 @@ After adjusting the paths in inference_ViT.py.
 #### A Note on Dataset and Data Quality For Training:
 This repo does not come with sample data. To train your own model, you need to supply your own dataset. These can be found all over the internet, but [this one is fairly robust](https://www.kaggle.com/datasets/birdy654/deep-voice-deepfake-voice-recognition). 
 
-It is important to note however, that for practical applications, the quality of your dataset is very important. Both convolutional neural networks and vision transformers can generalize to a degree, but each deepfake model has a slightly different signal and they are reducing in strength as these models become more sophisticated. Consistently revisiting your dataset, how recently the data has been produced and the total composition of the dataset. 
+It is important to note however, that for practical applications, the quality of your dataset is very important. Both convolutional neural networks and vision transformers can generalize to a degree, but each deepfake production model has a slightly different signal/signature. These signals get less pronounced over time as these models become more sophisticated. So, consistently revisiting your dataset, how recently the data has been produced and the total composition of the dataset is a very good idea. 
 
 Ideally, you want the AI half of your dataset to be comprised of the latest and most performant deepfake models in equal balance. You should also seek as many "in the wild" examples from the internet as possible. These deepfakes often contain important additional noise such as background music and stem mixtures that come from exporting audio with professional editing software. Our experiementation suggests that you ideally want at least 50% of your dataset to be high quality and convincing "in the wild" examples and 50% to be raw outputs of the latest most performance audio deepfake models. 
 
