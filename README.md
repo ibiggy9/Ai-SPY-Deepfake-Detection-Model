@@ -236,7 +236,17 @@ Finally, both "vision_transformer_incorrect.txt" and "regular_incorrect_validati
 ### A Few Tips Regarding Evaluation
 Across our many attempts to make this as a accurate as possible for our users, it is abundantly clear that robust testing is essential. Our model validation included the above but also included testing the model across many subsets of audio. We recommend you do this too for any model you decide to train. You don't just want to test across sound domains but also editing and compression domains. Our basic mental model for this is as follows:
 ```bash
-*<sound domain> + <compression domain> + (if ai) <model>*
+*<is_pure> + <sound domain> + <compression domain> + (if ai) => <model>*
+#is_pure is meant to mean if there is background sound or if it is just pure audio
+
+#Examples
+#For AI:
+!is_pure + professional_recording + tiktok + elevenlabs
+is_pure + narration + final_cut_pro_export + whisper
+
+#For Human
+!is_pure + outdoor_speech + youtube
+
 ```
 
 
