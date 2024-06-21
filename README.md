@@ -1,5 +1,5 @@
 # Audio Deepfake Detection 
-## Vision Transformers vs Convolutional Networks For Practical Applications
+### Vision Transformers vs Convolutional Networks For Practical Applications
 
 ## Overview 
 Ai-SPY is a company that focuses on deepfake detection for a better more genuine internet. This repo provides access to pretrained_weights for a convolutional net and vision transformer so you can check your own audio files for deepfakes. You can also train your own model and evaluate it with the code in this repo. 
