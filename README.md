@@ -23,7 +23,7 @@ pip install -r requirements.txt
 ## Usage
 
 ### Using Pre-Trained Weights to Make a Prediction:
-To run the model on a single file, you need to clone the repo using the instructions above then, from the root directory, run:
+To run the model on a single file, you need to clone the repo using the instructions above then, from the base directory of the repo, run:
 ```bash
 python -m src.inference_CNN <path to an mp3 file>
 ```
