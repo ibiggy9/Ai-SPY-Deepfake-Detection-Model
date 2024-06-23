@@ -15,7 +15,7 @@ Clone the repository and install the required packages:
 
 ```bash
 git clone https://github.com/yourusername/audio-deepfake-detection.git
-cd audio-deepfake-detection
+cd Ai-SPY-Deepfake-Detection-Model
 pip install -r requirements.txt
 ```
 
