@@ -2,7 +2,7 @@
 ### Vision Transformers vs Convolutional Networks For Fast & Accurate Audio Deepfake Detection Applications
 
 ## Ai-SPY Products
-- [Mobile App](https://apps.apple.com/us/app/ai-spy/id6463496601)
+- [Free Mobile App](https://apps.apple.com/us/app/ai-spy/id6463496601)
 - [Soc-2 Certified Web Platform (Contact Us)](mailto:ss@ai-spy.xyz)
 - [Consulting/Manual Analysis (Contact Us)](mailto:ss@ai-spy.xyz)
 
