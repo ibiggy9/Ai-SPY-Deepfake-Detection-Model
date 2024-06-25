@@ -14,7 +14,7 @@ import signal
 from models.vit_model import VisionTransformer
 import argparse
 
-def load_model(model_path, patch_size=16, embedding_dim=512, num_heads=8, num_layers=8, num_classes=2):
+def load_model(model_path, patch_size=32, embedding_dim=512, num_heads=8, num_layers=8, num_classes=2):
     try:
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         model = VisionTransformer(patch_size, embedding_dim, num_heads, num_layers, num_classes, device=device)

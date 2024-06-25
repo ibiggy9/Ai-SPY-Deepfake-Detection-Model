@@ -3,3 +3,4 @@ data/human_split/human
 data/validation_set/ai/ai
 data/validation_set/human/human
 myenv/
+data/dataset/ 
