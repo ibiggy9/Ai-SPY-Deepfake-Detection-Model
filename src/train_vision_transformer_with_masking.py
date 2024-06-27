@@ -308,7 +308,7 @@ def run_vit(save_path, log_name, lr, bs, val_log_name, incorrect_v_log, patch_si
 
 if __name__ == '__main__':
     run_vit(
-        save_path='./data/models/training_models_vit/vit.pth', 
+        save_path='./models/vit.pth', 
         log_name='./Vit_Logs/vision_transformer_log.txt', 
         lr=0.00001, 
         bs=16, 
