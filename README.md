@@ -9,6 +9,9 @@
 ## Overview 
 Ai-SPY is a company that focuses on deepfake detection for a better more genuine internet. This repo provides access to pretrained_weights for a convolutional net and vision transformer so you can check your own audio files for deepfakes. You can also train your own model and evaluate it with the code in this repo. 
 
+## Detailed Explanation
+We have created a repo written in c to demonstrate the underlying math. Note that it is not functional as autograd and backprop needs to be completed. The repo can be found [here.](https://github.com/ibiggy9/Vision-Transformer-in-C) This is currently just for the vision transformer but the CNN is coming soon.
+
 ## Installation
 To get started, make sure you have Python 3.10+ installed. You can check your Python version with:
 ```bash
