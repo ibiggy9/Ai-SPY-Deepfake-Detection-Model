@@ -27,14 +27,20 @@ def load_model(model_path, patch_size=32, embedding_dim=512, num_heads=8, num_la
         print(f"Error loading model: {e}")
         return None
 
+
+
 def preprocess_audio(audio_path, sr=16000, duration=3, global_mean=-58.18715250929163, global_std=15.877255962380845):
     y, _ = librosa.load(audio_path, sr=sr)
-    y = librosa.util.fix_length(y, size=sr * duration)
     y = np.clip(y, -1.0, 1.0)
-    clips = [y[i:i + sr * duration] for i in range(0, len(y) - sr * duration + 1, sr * duration)]
-    
+    clip_length = sr * duration
+    clips = [y[i:i + clip_length] for i in range(0, len(y), clip_length)]
+
     processed_clips = []
     for clip in clips:
+        if len(clip) < clip_length:
+            # Skip clips that are shorter than the desired duration
+            continue
+        
         S = np.abs(librosa.stft(clip))**2
         S_db = librosa.power_to_db(S + 1e-10, ref=np.max)
         S_db = (S_db - global_mean) / global_std
@@ -46,9 +52,11 @@ def preprocess_audio(audio_path, sr=16000, duration=3, global_mean=-58.187152509
                 (0, max(0, target_shape[1] - S_db.shape[1]))
             ), mode='constant', constant_values=global_mean)
             S_db = S_db[:target_shape[0], :target_shape[1]]
+        
         spectrogram_tensor = torch.tensor(S_db, dtype=torch.float32).unsqueeze(0)
         processed_clips.append(spectrogram_tensor)
-        
+
+    print(len(processed_clips))
     return processed_clips
 
 def predict_neural_for_testing(clips, model):
