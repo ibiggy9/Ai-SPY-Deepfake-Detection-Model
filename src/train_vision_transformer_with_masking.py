@@ -309,9 +309,9 @@ def run_vit(save_path, log_name, lr, bs, val_log_name, incorrect_v_log, patch_si
 if __name__ == '__main__':
     run_vit(
         save_path='./models/vit.pth', 
-        log_name='./Vit_Logs/vision_transformer_log.txt', 
+        log_name='./Vit_Logs/vision_transformer_log_masking.txt', 
         lr=0.00001, 
         bs=16, 
-        val_log_name='./Vit_Logs/vision_transformer_val_log.txt', 
-        incorrect_v_log='./Vit_Logs/vision_transformer_incorrect.txt'
+        val_log_name='./Vit_Logs/vision_transformer_val_log_masking.txt', 
+        incorrect_v_log='./Vit_Logs/vision_transformer_incorrect_masking.txt'
     )
