@@ -256,10 +256,10 @@ def run_vit(save_path, log_name, lr, bs, val_log_name, incorrect_v_log, patch_si
     scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, 'min', patience=10, factor=0.1, verbose=True)
 
     # Data directories
-    holdout_ai_directory = '/Users/main/Desktop/projects/businesses/AI-SPY/trainer/voiceonly/datasets/validation_holdout/3s_16_48/ai'
-    holdout_human_directory = '/Users/main/Desktop/projects/businesses/AI-SPY/trainer/voiceonly/datasets/validation_holdout/3s_16_48/human'
-    ai_directory = '/Users/main/Desktop/projects/businesses/AI-SPY/trainer/voiceonly/datasets/exp_12/training/3s/ai'
-    human_directory = '/Users/main/Desktop/projects/businesses/AI-SPY/trainer/voiceonly/datasets/exp_12/training/3s/human'
+    holdout_ai_directory = './data/validation_set/ai_split'
+    holdout_human_directory = './data/validation_set/human_split'
+    ai_directory = './data/ai_split'
+    human_directory = './data/human_split'
 
 
 
