@@ -85,6 +85,37 @@ The input is a 1025 x 94 spectrogram that represents 3 seconds of audio at 16,00
 
 The vision transformer is a standard Vit architecture. Others have experiemented with Siamese networks as a preprocessing step, but this adds computational overhead and doesn't have a clear performance improvement when used for practical applications. 
 
+## Vision Transformer with Masking
+![Vision Transformer with Masking](/assets/Vision_Transformer_Masking.png)
+
+Masking is a helpful technique if you have more robust and larger datasets. It encourages generalization by selectively setting some tokens/image patches to a placeholder value, allowing the transformer to learn how to predict the surrounding tokens better. This encourages better performance versus CNNs because it addresses the key assumptions of those networks, also known as their inductive biases. The biggest assumptions are:
+
+## Locality:
+The assumption that nearby pixels are more closely related than ones that are farther away. In deepfake audio detection, this isn't always the case. For example, in a 3-second clip, it might be a low frequency at second 3 and a high frequency at second 0.1 that are most instructive for telling if that clip is a deepfake. CNNs don't easily recognize long-range dependencies because the receptive field scales gradually with the depth of the network. In the CNN provided in this repo, it is a fairly deep network with 5 layers and is extensible out to 7, but it doesn't capture long-range dependencies as well as a vision transformer, which saves information about the specific position of each image patch in relation to each other.
+
+## Translation Invariance:
+This assumption refers to the tendency to recognize that the same observation means the same thing when observed in a different position. This is actually somewhat beneficial in the context of reviewing spectrograms, as higher intensity in a given region means that that region is active in the clip. However, related to the previous point about locality, the CNN doesn't know that a certain area that's lit up is high or low frequency because it is unaware of where it is happening in the image. Again, vision transformers' positional embeddings help solve for this assumption.
+
+## Hierarchical Feature Learning:
+This speaks to the assumption that smaller phenomena build up to bigger ones in a hierarchical manner. In other words, by expanding your receptive field gradually, you will build a hierarchy of understanding that is beneficial for the classification task you are doing. This is somewhat beneficial when analyzing spectrograms, as it is the case that the collective frequency intensity patterns do hierarchically form a picture of what is happening in the audio. However, the strict hierarchical nature may sometimes miss broader context or long-range dependencies which vision transformers handle better with their global attention mechanisms.
+
+## Parameter Sharing:
+This speaks to the way that CNNs share features between layers. This points to the assumption that the same set of heuristics/weights used to analyze one region of the image are useful elsewhere, which isn't necessarily true, but is in the case of spectrograms in the context of deepfake audio detection. It is true, for example, that one region of a spectrogram may contain AI-like patterns that happen at 900Hz that have helpful information about detecting the same at 4000Hz. Vision transformers have no such assumption, or at least a weaker assumption in this sense, because of their positional embedding, which separates its features from the rest of the spectrogram.
+
+## Spatial Hierarchies:
+Spatial hierarchies point to the learning that happens as the receptive field shrinks across pooling and convolutional layers and how, at different stages, the model is trained on a hierarchy of a gradually increasing receptive field. This is an issue when analyzing audio spectrograms because the specific arrangement of frequencies over time is crucial for accurately interpreting the audio signal. Unlike in image data, where hierarchical abstractions (from edges to shapes to objects) are beneficial, audio data requires a more nuanced understanding of how frequencies change and interact over time.
+
+Vision transformers, with their ability to handle global context through self-attention mechanisms, can address this issue. They do not rely on spatial hierarchies and can consider the entire spectrogram as a whole, allowing for a more detailed and context-aware analysis of the audio signal. This capability is particularly beneficial in tasks like deepfake audio detection, where subtle temporal and spectral patterns are essential for distinguishing genuine audio from manipulated content.
+
+## Shift Invariance:
+Shift invariance refers to the ability of CNNs to recognize features regardless of their position within the input image. This property is advantageous for many image-related tasks, as it allows the network to detect objects and patterns even if they appear in different locations. However, when analyzing spectrograms for audio data, this assumption can be problematic.
+
+In the context of spectrograms, the precise location of features matters significantly because the vertical axis represents frequency and the horizontal axis represents time. Shift invariance means that the CNN might overlook the importance of where specific frequencies occur within the time frame, potentially leading to a loss of critical information about the temporal sequence of audio events.
+
+For instance, the position of a particular pattern in a spectrogram could indicate the onset of a certain sound or the presence of a specific frequency at a particular time, both of which are crucial for tasks like audio classification and deepfake detection. If the model treats these patterns as the same regardless of their position, it might miss out on important context.
+
+Vision transformers address this limitation through the use of positional embeddings, which encode the positional information of the input tokens (in this case, segments of the spectrogram). This allows the model to maintain an awareness of the specific locations of features, preserving the temporal and frequency context essential for accurately interpreting audio signals. By doing so, vision transformers can offer a more nuanced and precise analysis, making them potentially more effective for tasks involving detailed spectrogram analysis, such as detecting audio deepfakes.
+
 ### Dataset & Data Preparation:
 
 #### A Note on Dataset and Data Quality For Training:
