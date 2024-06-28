@@ -271,7 +271,7 @@ def run(save_path, log_name, lr, bs, val_log_name, incorrect_v_log):
     test_loader = DataLoader(test_dataset, batch_size=bs, shuffle=True, num_workers=cpu_count())
     validation_loader = DataLoader(validation_dataset, batch_size=bs, shuffle=True, num_workers=cpu_count())
 
-    device = torch.device('cuda' if torch.cuda.is_available() else 'mps')
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model = model.to(device)
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
