@@ -80,7 +80,7 @@ After adjusting the paths in inference_ViT.py.
 ### CNN Model Architecture:
 ![CNN Architecture](assets/CNN_Diagram_new.png)
 
-The input is a 1025 x 94 spectrogram that represents 3 seconds of audio at 16,000 sample rate and 48,000 kbps bit rate. It goes through 5 convolutional layers, each with batchnorming and maxpooling then is flattened to a fully connected layer, then another that outputs 2 classes. Other architectures have been tried including resnet, and densenet but performance improvements were not pronounced, particularly when establishing speed and compute needed for inference as an important consideration for practical applications. 
+The input is a 1025 x 94 spectrogram that represents 3 seconds of audio at 16,000 sample rate and 48,000 kbps bit rate. The kernel shape is rectangular to better identify the patterns that are normative in spectrogram data. Short and wide kernels overemphasize temporal features while thin and tall kernels emphasize frequency intensity. Through experiementation the latterw as much more effective. It goes through 5 convolutional layers, each with batchnorming and maxpooling then is flattened to a fully connected layer, then another that outputs 2 classes. Other architectures have been tried including resnet, and densenet but performance improvements were not pronounced, particularly when establishing speed and compute needed for inference as an important consideration for practical applications. 
 
 
 ## Vision Transformer Architecture:
