@@ -90,7 +90,9 @@ The vision transformer is a standard Vit architecture. Others have experiemented
 ## Vision Transformer with Masking
 ![Vision Transformer with Masking](/assets/Vision_Transformer_Masking.png)
 
-Masking is a helpful technique if you have more robust and larger datasets. It encourages generalization by selectively setting some tokens/image patches to a placeholder value, allowing the transformer to learn how to predict the surrounding tokens better. This encourages better performance versus CNNs because it addresses the key assumptions of those networks, also known as their inductive biases. The biggest assumptions are:
+Masking is a helpful technique if you have more robust and larger datasets. It encourages generalization by selectively setting some tokens/image patches to a placeholder value, allowing the transformer to learn how to predict the surrounding tokens better. This encourages better performance versus CNNs because it addresses the key assumptions of those networks, also known as their inductive biases. The biggest assumptions below. 
+
+## Inductive Biases Of CNNs That Are Addressed By Vision Transformers:
 
 ### Locality:
 The assumption that nearby pixels are more closely related than ones that are farther away. In deepfake audio detection, this isn't always the case. For example, in a 3-second clip, it might be a low frequency at second 3 and a high frequency at second 0.1 that are most instructive for telling if that clip is a deepfake. CNNs don't easily recognize long-range dependencies because the receptive field scales gradually with the depth of the network. In the CNN provided in this repo, it is a fairly deep network with 5 layers and is extensible out to 7, but it doesn't capture long-range dependencies as well as a vision transformer, which saves information about the specific position of each image patch in relation to each other.
