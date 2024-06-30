@@ -12,6 +12,7 @@ from tqdm import tqdm
 import time
 from models.cnn_model import CNNTest
 import argparse
+from multiprocessing import cpu_count
 
 def load_model(model_path):
     print(f"Loading model from: {model_path}")
@@ -146,7 +147,7 @@ def process_directory(directory_path, model, sample_rate, bit_rate):
     print(f"Current Dir {directory_path}")
     args = [(audio_file, model, bit_rate, sample_rate) for audio_file in audio_files]
 
-    with Pool(processes=24) as pool:
+    with Pool(processes=cpu_count()) as pool:
         result_objects = pool.starmap_async(process_audio_file, args)
         results = []
         for result in tqdm(result_objects.get(), total=len(args)):
