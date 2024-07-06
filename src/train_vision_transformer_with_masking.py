@@ -245,7 +245,7 @@ def validate(model, validation_loader, criterion, device, log_name, incorrect_lo
 
     return validation_loss
 
-def run_vit(save_path, log_name, lr, bs, val_log_name, incorrect_v_log, patch_size=16, num_heads=8, num_layers=8, embedding_dim=512, num_classes=2):
+def run_vit(save_path, log_name, lr, bs, val_log_name, incorrect_v_log, patch_size=32, num_heads=8, num_layers=8, embedding_dim=512, num_classes=2):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     # Initialize the Vision Transformer model (removed num_patches argument)
     model = VisionTransformer(patch_size, embedding_dim, num_heads, num_layers, num_classes, device)
@@ -260,7 +260,6 @@ def run_vit(save_path, log_name, lr, bs, val_log_name, incorrect_v_log, patch_si
     holdout_human_directory = './data/validation_set/human_split'
     ai_directory = './data/ai_split'
     human_directory = './data/human_split'
-
 
 
     # Seed for reproducibility

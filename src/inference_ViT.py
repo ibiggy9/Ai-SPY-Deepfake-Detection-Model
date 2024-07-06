@@ -126,6 +126,7 @@ def process_audio_file(audio_file, model, sample_rate, bit_rate):
         ai_count = sum(1 for result in result['chunk_results'] if result['prediction'] == "ai")
         human_count = sum(1 for result in result['chunk_results'] if result['prediction'] == "human")
         total = len(result['chunk_results'])
+        print(result['chunk_results'])
 
         return {
             "name": audio_file,

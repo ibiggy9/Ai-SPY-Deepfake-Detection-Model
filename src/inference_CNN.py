@@ -49,7 +49,7 @@ def preprocess_audio(audio_path, sr=16000, duration=3, global_mean=-58.187152509
         spectrogram_tensor = torch.tensor(S_db, dtype=torch.float32).unsqueeze(0)
         processed_clips.append(spectrogram_tensor)
 
-    print(len(processed_clips))
+    
     return processed_clips
 
 def predict_neural_for_testing(clips, model):

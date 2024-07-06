@@ -2,7 +2,7 @@ import os
 import torch
 import json
 import time
-from multiprocessing import Pool
+from multiprocessing import Pool, cpu_count
 from tqdm import tqdm
 from pydub import AudioSegment
 import uuid
@@ -13,7 +13,7 @@ import numpy as np
 import signal
 from models.vit_model_masking import VisionTransformerWithMasking as VisionTransformer
 import argparse
-from multiprocessing import cpu_count
+
 
 def load_model(model_path, patch_size=32, embedding_dim=512, num_heads=8, num_layers=8, num_classes=2):
     try:
@@ -28,14 +28,19 @@ def load_model(model_path, patch_size=32, embedding_dim=512, num_heads=8, num_la
         print(f"Error loading model: {e}")
         return None
 
+
 def preprocess_audio(audio_path, sr=16000, duration=3, global_mean=-58.18715250929163, global_std=15.877255962380845):
     y, _ = librosa.load(audio_path, sr=sr)
-    y = librosa.util.fix_length(y, size=sr * duration)
     y = np.clip(y, -1.0, 1.0)
-    clips = [y[i:i + sr * duration] for i in range(0, len(y) - sr * duration + 1, sr * duration)]
-    
+    clip_length = sr * duration
+    clips = [y[i:i + clip_length] for i in range(0, len(y), clip_length)]
+
     processed_clips = []
     for clip in clips:
+        if len(clip) < clip_length:
+            # Skip clips that are shorter than the desired duration
+            continue
+        
         S = np.abs(librosa.stft(clip))**2
         S_db = librosa.power_to_db(S + 1e-10, ref=np.max)
         S_db = (S_db - global_mean) / global_std
@@ -47,10 +52,13 @@ def preprocess_audio(audio_path, sr=16000, duration=3, global_mean=-58.187152509
                 (0, max(0, target_shape[1] - S_db.shape[1]))
             ), mode='constant', constant_values=global_mean)
             S_db = S_db[:target_shape[0], :target_shape[1]]
+        
         spectrogram_tensor = torch.tensor(S_db, dtype=torch.float32).unsqueeze(0)
         processed_clips.append(spectrogram_tensor)
-        
+
+    print(len(processed_clips))
     return processed_clips
+
 
 def predict_neural_for_testing(clips, model):
     model.eval()
@@ -118,6 +126,7 @@ def process_audio_file(audio_file, model, sample_rate, bit_rate):
         ai_count = sum(1 for result in result['chunk_results'] if result['prediction'] == "ai")
         human_count = sum(1 for result in result['chunk_results'] if result['prediction'] == "human")
         total = len(result['chunk_results'])
+        print(result['chunk_results'])
 
         return {
             "name": audio_file,
@@ -141,7 +150,7 @@ def process_directory(directory_path, model, sample_rate, bit_rate):
     print(f"Current Dir {directory_path}")
     args = [(audio_file, model, sample_rate, bit_rate) for audio_file in audio_files]
 
-    with Pool(processes=cpu_count) as pool:
+    with Pool(processes=cpu_count()) as pool:
         result_objects = pool.starmap_async(process_audio_file, args)
         results = []
         for result in tqdm(result_objects.get(), total=len(args)):
