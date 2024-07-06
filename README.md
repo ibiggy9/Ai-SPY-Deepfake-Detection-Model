@@ -33,7 +33,7 @@ pip install -r requirements.txt
 ### Using Pre-Trained Weights to Make a Prediction:
 To run the model on a single file, you need to clone the repo using the instructions above then, from the base directory of the repo, run:
 ```bash
-python -m src.inference_CNN <path to an mp3 file>
+python -m src.inference_cnn <path to an mp3 file>
 ```
 Results will look like this:
 ```bash
@@ -44,7 +44,7 @@ Results will look like this:
   "Prediction": "human"
 }
 ```
-To run the model on an entire directory, you need to adjust the following code in inference_CNN.py:
+To run the model on an entire directory, you need to adjust the following code in inference_cnn.py:
 ```python
      human_dirs = [
           
@@ -60,18 +60,24 @@ To run the model on an entire directory, you need to adjust the following code i
 Place the path to your directory in either human_dirs or ai_dirs. This was initially built to test how it performed on known human or ai files so the final_results in the CNN_logs will not be accurate. However, the console will print out the prediction for each file in the directory upon running this. Once you have updated the paths above, you just need to run:
 
 ```bash
-python -m src.inference_CNN
+python -m src.inference_cnn
 ```
 
 You can do the exact same thing with the vision transformer, pointing to a single file or an entire directory by running:
 ```bash
-python -m src.inference_ViT <path to your file>
+python -m src.inference_vit <path to your file>
 ```
 or
 ```bash
-python -m src.inference_ViT
+python -m src.inference_vit
 ```
-After adjusting the paths in inference_ViT.py.
+After adjusting the paths in inference_vit.py.
+
+#### New (Jul 2024)
+You can now run inference on the masking vision transformer with
+```bash
+python -m src.inference_vit_mask <path to your file or blank if dir>
+```
 
 
 
